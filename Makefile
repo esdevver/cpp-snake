@@ -5,7 +5,7 @@ all: build run
 build:
 	# Compiling
 	@mkdir -p bin
-	g++ $(SRC_FILES) -o ./bin/main -pthread -Werror -O3
+	g++ $(SRC_FILES) -o ./bin/main -pthread -O3
 
 run:
 	# Running
