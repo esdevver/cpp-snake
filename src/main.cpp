@@ -175,6 +175,24 @@ void keyListener () {
 			case 0:
 				if (c == 'q') goto quit;
 				if (c == '\e') arrow_stage = 1;
+				else {
+					DIRECTION new_dir;
+					switch (c) {
+						case 'w':
+							new_dir = UP;
+							break;
+						case 'a':
+							new_dir = LEFT;
+							break;
+						case 's':
+							new_dir = DOWN;
+							break;
+						case 'd':
+							new_dir = RIGHT;
+							break;
+					}
+					snake.direction(new_dir);
+				}
 				break;
 			case 1:
 				if (c == '[') arrow_stage = 2;
