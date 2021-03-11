@@ -1,6 +1,7 @@
 
 #define WIDTH 28
 #define HEIGHT 16
+#define FPS 8
 
 #include <deque>
 #include <iostream>
@@ -270,7 +271,7 @@ int main () {
 
 	game_running = true;
 
-	while (game_running) { snake.step(); std::this_thread::sleep_for(std::chrono::milliseconds(1000/8)); }
+	while (game_running) { snake.step(); std::this_thread::sleep_for(std::chrono::milliseconds(1000/FPS)); }
 
 	key_thread.join();
 
