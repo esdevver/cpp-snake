@@ -4,7 +4,7 @@ all: build run
 
 build:
 	@mkdir -p bin
-	g++ $(SRC_FILES) -o ./bin/main -pthread
+	g++ $(SRC_FILES) -o ./bin/main -pthread -Werror -O3
 
 run:
 	./bin/main
