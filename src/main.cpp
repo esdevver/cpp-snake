@@ -123,7 +123,7 @@ struct Snake {
 		else for (pos block : blocks) if (block == new_head) { game_over = true; break; }
 
 		if (game_over) {
-			setStatus(); std::cout << "Game over; final score " << (blocks.size()-3) << std::flush;
+			setStatus(); std::cout << "\x1b[1;31mGame over\x1b[0m; final score " << (blocks.size()-3) << std::flush;
 			game_running = false; return;
 		}
 
@@ -143,14 +143,14 @@ struct Snake {
 		} else {
 			if (blocks.size() == WIDTH * HEIGHT) {
 				setStatus();
-				std::cout << "You win? You filled the board." << std::flush;
+				std::cout << "\x1b[1;35mYou win?\x1b[0m You filled the board." << std::flush;
 				game_running = false; return;
 			}
 			spawnFood();
 			std::cout << "\x1b[31m\x1b[" << (food.y+3) << ';' << (food.x+2) << "fo\x1b[0m";
 			int score = blocks.size()-3;
 			setStatus();
-			std::cout << "Score: " << score;
+			std::cout << "\x1b[1;35mScore: " << score << "\x1b[0m";
 		}
 
 		std::cout << std::flush;
@@ -243,7 +243,7 @@ int main () {
 	std::cout << "\x1b[?25l";
 
 	// draw walls
-	std::cout << "\x1b[2J\x1b[HArrow keys to move. q to quit.\n\x1b[38;5;214m";
+	std::cout << "\x1b[2J\x1b[H\x1b[1;38;5;44mArrow keys\x1b[0m to move. \x1b[1;38;5;44mq\x1b[0m to quit.\n\x1b[38;5;214m";
 	for (int i = 0; i < WIDTH + 2; i++) std::cout << 'x';
 	std::cout << '\n';
 	for (int i = 0; i < HEIGHT; i++) {
@@ -252,7 +252,7 @@ int main () {
 		std::cout << "x\n";
 	}
 	for (int i = 0; i < WIDTH + 2; i++) std::cout << 'x';
-	std::cout << "\n\x1b[0mScore: 0";
+	std::cout << "\n\x1b[1;35mScore: 0\x1b[0m";
 	
 	// draw snake
 	std::cout << "\x1b[32m";
