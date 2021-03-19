@@ -141,6 +141,11 @@ struct Snake {
 			std::cout << "\x1b[" << (tail.y+3) << ';' << (tail.x+2) << "f ";
 			blocks.pop_front();
 		} else {
+			if (blocks.size() == WIDTH * HEIGHT) {
+				setStatus();
+				std::cout << "You win? You filled the board." << std::flush;
+				game_running = false; return;
+			}
 			spawnFood();
 			std::cout << "\x1b[31m\x1b[" << (food.y+3) << ';' << (food.x+2) << "fo\x1b[0m";
 			int score = blocks.size()-3;
