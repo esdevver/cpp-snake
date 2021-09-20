@@ -65,7 +65,7 @@ void spawnFood();
 struct Snake {
 
 private:
-  DIRECTION dir = RIGHT, pending_dir = RIGHT;
+  DIRECTION dir = RIGHT, pending_dir = RIGHT, last_dir = RIGHT;
 
 public:
   std::deque<pos> blocks;
@@ -104,6 +104,44 @@ public:
       break;
     }
 
+    // amend last head
+    pos head = blocks.back();
+    std::string character;
+
+    if (dir != last_dir) {
+
+      switch (dir) {
+      case RIGHT:
+        character = (last_dir == UP) ? "\u250f" : "\u2517";
+        break;
+      case UP:
+        character = (last_dir == RIGHT) ? "\u251b" : "\u2517";
+        break;
+      case LEFT:
+        character = (last_dir == UP) ? "\u2513" : "\u251b";
+        break;
+      case DOWN:
+        character = (last_dir == RIGHT) ? "\u2513" : "\u250f";
+        break;
+      }
+
+    } else {
+      switch (dir) {
+      case RIGHT:
+      case LEFT:
+        character = "\u2501";
+        break;
+      case UP:
+      case DOWN:
+        character = "\u2503";
+        break;
+      }
+    }
+    std::cout << "\x1b[32m\x1b[" << (head.y + 3) << ';' << (head.x + 2) << 'f'
+              << character << "\x1b[0m";
+
+    last_dir = dir;
+
     bool game_over = false;
 
     if (new_head.x < 0 || new_head.y < 0 || new_head.x >= WIDTH ||
@@ -131,8 +169,24 @@ public:
     }
 
     blocks.push_back(new_head);
+
+    switch (dir) {
+    case RIGHT:
+      character = "\u2578";
+      break;
+    case UP:
+      character = "\u257b";
+      break;
+    case LEFT:
+      character = "\u257a";
+      break;
+    case DOWN:
+      character = "\u2579";
+      break;
+    }
+
     std::cout << "\x1b[32m\x1b[" << (new_head.y + 3) << ';' << (new_head.x + 2)
-              << "f#\x1b[0m";
+              << 'f' << character << "\x1b[0m";
 
     if (!eat) {
       pos tail = blocks.front();
@@ -149,7 +203,7 @@ public:
       }
       spawnFood();
       std::cout << "\x1b[31m\x1b[" << (food.y + 3) << ';' << (food.x + 2)
-                << "fo\x1b[0m";
+                << "f\u25cf\x1b[0m";
       int score = blocks.size() - 3;
       setStatus();
       std::cout << "\x1b[1;35mScore: " << score << "\x1b[0m";
@@ -247,32 +301,33 @@ int main() {
 
   // draw walls
   std::cout << "\x1b[2J\x1b[H\x1b[1;38;5;44mArrow keys\x1b[0m to move. "
-               "\x1b[1;38;5;44mq\x1b[0m to quit.\n\x1b[38;5;214m";
-  for (int i = 0; i < WIDTH + 2; i++)
-    std::cout << 'x';
-  std::cout << '\n';
+               "\x1b[1;38;5;44mq\x1b[0m to quit.\n\x1b[38;5;214m\u2554";
+  for (int i = 0; i < WIDTH; i++)
+    std::cout << "\u2550";
+  std::cout << "\u2557\n";
   for (int i = 0; i < HEIGHT; i++) {
-    std::cout << 'x';
+    std::cout << "\u2551";
     std::cout << "\x1b[38;5;234m";
     for (int j = 0; j < WIDTH; j++)
       std::cout << "\u253c";
     std::cout << "\x1b[38;5;214m";
-    std::cout << "x\n";
+    std::cout << "\u2551\n";
   }
-  for (int i = 0; i < WIDTH + 2; i++)
-    std::cout << 'x';
-  std::cout << "\n\x1b[1;35mScore: 0\x1b[0m";
+  std::cout << "\u255a";
+  for (int i = 0; i < WIDTH; i++)
+    std::cout << "\u2550";
+  std::cout << "\u255d\n\x1b[1;35mScore: 0\x1b[0m";
 
   // draw snake
   std::cout << "\x1b[32m";
   for (pos block : snake.blocks) {
 
-    std::cout << "\x1b[" << (block.y + 3) << ';' << (block.x + 2) << "f#";
+    std::cout << "\x1b[" << (block.y + 3) << ';' << (block.x + 2) << "f\u2501";
   }
 
   // draw food
   std::cout << "\x1b[31m";
-  std::cout << "\x1b[" << (food.y + 3) << ';' << (food.x + 2) << "fo";
+  std::cout << "\x1b[" << (food.y + 3) << ';' << (food.x + 2) << "f\u25cf";
   std::cout << "\x1b[0m";
 
   std::cout << "\x1b[" << (HEIGHT + 3) << ";0f";
